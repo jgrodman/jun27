@@ -24,8 +24,19 @@
    ./deploy_scheduler.sh
    ```
 
-4. **Run simple test:**
+4. **Run tests in order:**
+
+   **Basic scheduling test:**
    ```bash
    python3 test/simple_test.py
    ```
 
+   **One-pod-per-node constraint test:**
+   ```bash
+   python3 test/one_pod_per_node.py
+   ```
+
+   **Priority and preemption test:**
+   ```bash
+   python3 test/priorities.py
+   ```
