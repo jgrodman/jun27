@@ -43,7 +43,20 @@ def test_single_pod_scheduling():
         
         if cleaned_count > 0:
             print(f"Cleaned up {cleaned_count} existing pods")
-            time.sleep(5)  # Wait for deletion
+            print("Waiting for pods to be fully deleted...")
+            time.sleep(10)  # Wait longer for cleanup
+            
+            # Verify pods are actually deleted
+            for i in range(60):  # Wait up to 60 more seconds
+                remaining_pods = v1.list_namespaced_pod(namespace=namespace)
+                test_pods_remaining = [p for p in remaining_pods.items 
+                                     if p.metadata.name.startswith(('test-', 'simple-')) and 
+                                        p.spec.scheduler_name == scheduler_name]
+                if not test_pods_remaining:
+                    print("✓ All test pods deleted")
+                    break
+                print(f"  Still waiting for {len(test_pods_remaining)} pods to delete...")
+                time.sleep(1)
         else:
             print("No existing test pods to clean up")
             
