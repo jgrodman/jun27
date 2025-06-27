@@ -26,10 +26,6 @@
 
 4. **Run simple test:**
    ```bash
-   python3 simple_test.py
+   python3 test/simple_test.py
    ```
 
-3. **Deploy a pod:**
-   ```bash
-   kubectl apply -f test/single-pod.yaml
-   ```
