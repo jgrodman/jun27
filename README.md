@@ -40,3 +40,15 @@
    ```bash
    python3 test/priorities.py
    ```
+
+## Features
+
+- **One-pod-per-node constraint**: Ensures no node runs more than one pod from our scheduler
+- **Priority-based scheduling**: Uses `scheduler.priority` annotation to determine pod priority
+- **Preemption**: Higher priority pods can preempt lower priority ones when no nodes are available
+- **Lowest priority selection**: Always preempts the lowest priority pod when multiple candidates exist
+
+## Next steps
+
+- **Gang-scheduling**: Schedule all pods in a job together or none at all
+- **Configurable namespaces**: Support custom namespaces (currently uses 'scheduling' and 'default')
