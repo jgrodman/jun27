@@ -88,14 +88,21 @@ class CustomScheduler:
         for event in w.stream(self.v1.list_pod_for_all_namespaces):
             event_type = event['type']
             pod = event['object']
+            pod_name = pod.metadata.name
+            
+            # Debug: Log all events for our scheduler
+            if pod.spec.scheduler_name == self.scheduler_name:
+                self.logger.info(f"DEBUG: Event {event_type} for pod {pod_name}, scheduler={pod.spec.scheduler_name}, node={pod.spec.node_name}")
             
             # Only handle pods assigned to our scheduler that aren't scheduled yet
             if (pod.spec.scheduler_name == self.scheduler_name and 
                 pod.spec.node_name is None and
                 event_type == 'ADDED'):
                 
-                self.logger.info(f"New pod to schedule: {pod.metadata.name}")
+                self.logger.info(f"New pod to schedule: {pod_name}")
                 self._schedule_pod(pod)
+            elif pod.spec.scheduler_name == self.scheduler_name:
+                self.logger.info(f"DEBUG: Skipped pod {pod_name} - event_type={event_type}, node_name={pod.spec.node_name}")
 
 
 if __name__ == "__main__":
